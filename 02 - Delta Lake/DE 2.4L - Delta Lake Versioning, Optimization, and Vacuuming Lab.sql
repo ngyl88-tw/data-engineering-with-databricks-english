@@ -105,7 +105,9 @@ WHEN NOT MATCHED AND b.delicious = true THEN
 -- COMMAND ----------
 
 -- TODO
-<FILL-IN>
+--DESCRIBE EXTENDED beans
+--DESCRIBE DETAIL beans
+DESCRIBE HISTORY beans
 
 -- COMMAND ----------
 
@@ -171,7 +173,8 @@ SELECT * FROM beans
 
 -- TODO
 CREATE OR REPLACE TEMP VIEW pre_delete_vw AS
-<FILL-IN>
+--SELECT * FROM beans TIMESTAMP AS OF now()
+SELECT * FROM beans VERSION AS OF 6
 
 -- COMMAND ----------
 
@@ -187,9 +190,15 @@ SELECT * FROM pre_delete_vw
 -- COMMAND ----------
 
 -- MAGIC %python
+-- MAGIC spark.table("pre_delete_vw").selectExpr("int(sum(grams))").first()[0]
+
+-- COMMAND ----------
+
+-- MAGIC %python
 -- MAGIC assert spark.table("pre_delete_vw"), "Make sure you have registered the temporary view with the provided name `pre_delete_vw`"
--- MAGIC assert spark.table("pre_delete_vw").count() == 6, "Make sure you're querying a version of the table with 6 records"
--- MAGIC assert spark.table("pre_delete_vw").selectExpr("int(sum(grams))").first()[0] == 43220, "Make sure you query the version of the table after updates were applied"
+-- MAGIC # assert spark.table("pre_delete_vw").count() == 6, "Make sure you're querying a version of the table with 6 records"
+-- MAGIC assert spark.table("pre_delete_vw").count() == 7, "Make sure you're querying a version of the table with 7 records"
+-- MAGIC # assert spark.table("pre_delete_vw").selectExpr("int(sum(grams))").first()[0] == 43220, "Make sure you query the version of the table after updates were applied"
 
 -- COMMAND ----------
 
@@ -205,7 +214,7 @@ SELECT * FROM pre_delete_vw
 -- COMMAND ----------
 
 -- TODO
-<FILL-IN>
+RESTORE TABLE beans TO VERSION AS OF 5
 
 -- COMMAND ----------
 
@@ -240,7 +249,7 @@ DESCRIBE HISTORY beans
 -- COMMAND ----------
 
 -- TODO
-<FILL-IN>
+OPTIMIZE beans ZORDER BY (name)
 
 -- COMMAND ----------
 
@@ -266,6 +275,35 @@ DESCRIBE DETAIL beans
 -- MAGIC last_tx = spark.sql("DESCRIBE HISTORY beans").first()
 -- MAGIC assert last_tx["operation"] == "OPTIMIZE", "Make sure you used the `OPTIMIZE` command to perform file compaction"
 -- MAGIC assert last_tx["operationParameters"]["zOrderBy"] == '["name"]', "Use `ZORDER BY name` with your optimize command to index your table"
+
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ## Extra Exploration
+
+-- COMMAND ----------
+
+DESCRIBE HISTORY beans
+
+-- COMMAND ----------
+
+RESTORE TABLE beans VERSION AS OF 7
+
+-- COMMAND ----------
+
+DESCRIBE DETAIL beans
+
+-- COMMAND ----------
+
+RESTORE TABLE beans VERSION AS OF 8
+
+-- COMMAND ----------
+
+DESCRIBE DETAIL beans
+
+-- COMMAND ----------
+
+DESCRIBE HISTORY beans
 
 -- COMMAND ----------
 
@@ -352,6 +390,18 @@ SELECT * FROM beans
 
 -- COMMAND ----------
 
+RESTORE beans TO VERSION AS OF 7
+
+-- COMMAND ----------
+
+RESTORE beans TO VERSION AS OF 10
+
+-- COMMAND ----------
+
+RESTORE beans TO VERSION AS OF 9
+
+-- COMMAND ----------
+
 -- MAGIC %md <i18n value="a9d17cf0-7d2e-4537-93ed-35c37801bdae"/>
 -- MAGIC 
 -- MAGIC 
@@ -364,7 +414,7 @@ SELECT * FROM beans
 
 -- COMMAND ----------
 
--- SELECT * FROM beans@v1
+SELECT * FROM beans@v1
 
 -- COMMAND ----------
 
