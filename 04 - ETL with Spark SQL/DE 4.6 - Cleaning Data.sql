@@ -237,6 +237,14 @@ WHERE user_id IS NOT NULL
 
 -- COMMAND ----------
 
+-- MAGIC %python
+-- MAGIC # from pyspark.sql.functions import max
+-- MAGIC # dedupedDF = (
+-- MAGIC #     usersDF.where(col("user_id")).isNotNull
+-- MAGIC # )
+
+-- COMMAND ----------
+
 CREATE OR REPLACE TEMP VIEW deduped_users AS
 SELECT user_id, user_first_touch_timestamp, max(email) AS email, max(updated) AS updated
 FROM users_dirty
@@ -279,6 +287,27 @@ SELECT max(user_id_count) <= 1 at_most_one_id FROM (
   FROM deduped_users
   WHERE email IS NOT NULL
   GROUP BY email)
+
+-- COMMAND ----------
+
+-- MAGIC %md <i18n value="39a69a24-b1e1-42cc-83f1-115b69a2b891"/>
+-- MAGIC 
+-- MAGIC Getting **email_domain** with PySpark.
+
+-- COMMAND ----------
+
+SELECT * FROM users_dirty
+
+-- COMMAND ----------
+
+-- MAGIC %python
+-- MAGIC import pyspark.sql.functions as F
+
+-- COMMAND ----------
+
+-- MAGIC %python
+-- MAGIC usersDF = spark.table("users_dirty")
+-- MAGIC display(usersDF)
 
 -- COMMAND ----------
 
