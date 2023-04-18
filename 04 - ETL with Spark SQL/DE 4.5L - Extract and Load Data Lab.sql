@@ -90,15 +90,14 @@ SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
 -- SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
 
 -- dtypes mismatch
-CREATE OR REPLACE TABLE events_json LOCATION '${da.paths.user_db}/external_table' AS
-SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
-
--- CREATE OR REPLACE TEMP VIEW events_json_tmp_vw
---   (key BINARY, offset BIGINT, partition INT, timestamp BIGINT, topic STRING, value BINARY)
---   USING json
---   AS SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
 -- CREATE OR REPLACE TABLE events_json LOCATION '${da.paths.user_db}/external_table' AS
---   SELECT * FROM events_json_tmp_vw
+-- SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
+
+-- ANSWER
+CREATE TABLE IF NOT EXISTS events_json
+  (key BINARY, offset BIGINT, partition INT, timestamp BIGINT, topic STRING, value BINARY)
+USING JSON 
+OPTIONS (path = "${da.paths.datasets}/ecommerce/raw/events-kafka")
 
 -- COMMAND ----------
 
@@ -137,7 +136,8 @@ DESCRIBE EXTENDED events_json
 -- COMMAND ----------
 
 -- TODO
-<FILL_IN>
+CREATE OR REPLACE TABLE events_raw
+(key BINARY, offset BIGINT, partition INT, timestamp BIGINT, topic STRING, value BINARY);
 
 -- COMMAND ----------
 
@@ -166,7 +166,8 @@ DESCRIBE EXTENDED events_json
 -- COMMAND ----------
 
 -- TODO
-<FILL_IN>
+INSERT INTO events_raw
+  SELECT * FROM events_json
 
 -- COMMAND ----------
 
@@ -178,7 +179,7 @@ DESCRIBE EXTENDED events_json
 -- COMMAND ----------
 
 -- TODO
-<FILL_IN>
+SELECT * FROM events_raw
 
 -- COMMAND ----------
 
@@ -213,7 +214,12 @@ DESCRIBE EXTENDED events_json
 -- COMMAND ----------
 
 -- TODO
-<FILL_IN> ${da.paths.datasets}/ecommerce/raw/item-lookup
+CREATE OR REPLACE TABLE item_lookup AS
+SELECT * FROM parquet.`${da.paths.datasets}/ecommerce/raw/item-lookup`
+
+-- COMMAND ----------
+
+DESCRIBE EXTENDED item_lookup
 
 -- COMMAND ----------
 
