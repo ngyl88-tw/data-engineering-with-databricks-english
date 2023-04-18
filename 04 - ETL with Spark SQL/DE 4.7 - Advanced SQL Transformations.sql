@@ -95,6 +95,15 @@ LIMIT 1
 
 -- COMMAND ----------
 
+-- MAGIC %python
+-- MAGIC import pyspark.sql.functions as F
+-- MAGIC 
+-- MAGIC F.schema_of_json?
+
+-- COMMAND ----------
+
+-- Less efficient as everytime we query it will try to interprete the schema again
+
 CREATE OR REPLACE TEMP VIEW parsed_events AS
   SELECT from_json(value, schema_of_json('{"device":"Linux","ecommerce":{"purchase_revenue_in_usd":1075.5,"total_item_quantity":1,"unique_items":1},"event_name":"finalize","event_previous_timestamp":1593879231210816,"event_timestamp":1593879335779563,"geo":{"city":"Houston","state":"TX"},"items":[{"coupon":"NEWBED10","item_id":"M_STAN_K","item_name":"Standard King Mattress","item_revenue_in_usd":1075.5,"price_in_usd":1195.0,"quantity":1}],"traffic_source":"email","user_first_touch_timestamp":1593454417513109,"user_id":"UA000000106116176"}')) AS json 
   FROM events_strings;
@@ -175,6 +184,11 @@ WHERE size(items) > 2
 -- MAGIC The **`explode`** function lets us put each element in an array on its own row.
 -- MAGIC 
 -- MAGIC Let's use this to explode event records with 3 or more items into separate rows, one for each item in the array.
+
+-- COMMAND ----------
+
+-- MAGIC %python
+-- MAGIC F.explode?
 
 -- COMMAND ----------
 
