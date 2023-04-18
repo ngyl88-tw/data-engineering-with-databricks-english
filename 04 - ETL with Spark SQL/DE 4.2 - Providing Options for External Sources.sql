@@ -269,7 +269,7 @@ DESCRIBE EXTENDED users_jdbc
 -- MAGIC %md <i18n value="2b8ce5b8-d76a-4be9-a2d3-9284ab701db7"/>
 -- MAGIC 
 -- MAGIC 
--- MAGIC While the table is listed as **`MANAGED`**, listing the contents of the specified location confirms that no data is being persisted locally.
+-- MAGIC ~~While the table is listed as **`MANAGED`**~~, listing the contents of the specified location confirms that no data is being persisted locally.
 
 -- COMMAND ----------
 

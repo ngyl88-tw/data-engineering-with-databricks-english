@@ -68,8 +68,20 @@
 
 -- COMMAND ----------
 
+-- MAGIC %python
+-- MAGIC files = dbutils.fs.ls(f"{DA.paths.datasets}/ecommerce/raw/events-kafka/")
+-- MAGIC display(files)
+
+-- COMMAND ----------
+
+SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
+
+-- COMMAND ----------
+
 -- TODO
-<FILL_IN> ${da.paths.datasets}/ecommerce/raw/events-kafka/
+-- CREATE OR REPLACE TABLE events_json AS # managed table
+CREATE OR REPLACE TABLE events_json LOCATION '${da.paths.working_dir}/external_table' AS
+  SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
 
 -- COMMAND ----------
 
@@ -77,6 +89,10 @@
 -- MAGIC 
 -- MAGIC 
 -- MAGIC **NOTE**: We'll use Python to run checks occasionally throughout the lab. The following cell will return an error with a message on what needs to change if you have not followed instructions. No output from cell execution means that you have completed this step.
+
+-- COMMAND ----------
+
+DESCRIBE EXTENDED events_json
 
 -- COMMAND ----------
 
