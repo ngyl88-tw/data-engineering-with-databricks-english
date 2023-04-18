@@ -78,10 +78,31 @@ SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
 
 -- COMMAND ----------
 
+-- MAGIC %python
+-- MAGIC files_checkpoints = dbutils.fs.ls(f"{DA.paths.user_db}")
+-- MAGIC display(files_checkpoints)
+
+-- COMMAND ----------
+
 -- TODO
--- CREATE OR REPLACE TABLE events_json AS # managed table
-CREATE OR REPLACE TABLE events_json LOCATION '${da.paths.working_dir}/external_table' AS
-  SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
+-- Managed table
+-- CREATE OR REPLACE TABLE events_json AS
+-- SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
+
+-- dtypes mismatch
+CREATE OR REPLACE TABLE events_json LOCATION '${da.paths.user_db}/external_table' AS
+SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
+
+-- CREATE OR REPLACE TEMP VIEW events_json_tmp_vw
+--   (key BINARY, offset BIGINT, partition INT, timestamp BIGINT, topic STRING, value BINARY)
+--   USING json
+--   AS SELECT * FROM json.`${DA.paths.datasets}/ecommerce/raw/events-kafka`
+-- CREATE OR REPLACE TABLE events_json LOCATION '${da.paths.user_db}/external_table' AS
+--   SELECT * FROM events_json_tmp_vw
+
+-- COMMAND ----------
+
+DROP TABLE events_json
 
 -- COMMAND ----------
 
