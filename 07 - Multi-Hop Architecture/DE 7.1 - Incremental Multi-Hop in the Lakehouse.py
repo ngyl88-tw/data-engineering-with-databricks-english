@@ -208,11 +208,21 @@ DA.data_factory.load()
 
 # MAGIC %sql
 # MAGIC CREATE OR REPLACE TEMPORARY VIEW recordings_w_pii AS (
-# MAGIC   SELECT device_id, a.mrn, b.name, cast(from_unixtime(time, 'yyyy-MM-dd HH:mm:ss') AS timestamp) time, heartrate
+# MAGIC   SELECT device_id, a.mrn, b.name, cast(from_unixtime(time, 'yyyy-MM-dd HH:mm:ss') AS timestamp) time, cast(heartrate AS DOUBLE) heartrate
 # MAGIC   FROM bronze_tmp a
 # MAGIC   INNER JOIN pii b
 # MAGIC   ON a.mrn = b.mrn
 # MAGIC   WHERE heartrate > 0)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT * FROM recordings_w_pii
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC DESCRIBE EXTENDED recordings_w_pii
 
 # COMMAND ----------
 
