@@ -85,6 +85,7 @@ DA.print_pipeline_config()
 # MAGIC | ------------- | ------------------- | ------------------------------------------ |
 # MAGIC | #1            | **`spark.master`**  | **`local[*]`**                             |
 # MAGIC | #2            | **`datasets_path`** | Enter the **Datasets Path** provided above |
+# MAGIC | #3            | **`source`** | Enter the **Source** provided above |
 # MAGIC 
 # MAGIC Finally, click **Create**.
 # MAGIC 
