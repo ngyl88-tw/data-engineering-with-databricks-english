@@ -65,6 +65,17 @@ display(files)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ## Stretching
+# MAGIC - Refer to Notebook "DE 4.4" and run the relevant commands
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Back to original Notebook
+
+# COMMAND ----------
+
 # MAGIC %md <i18n value="69333106-f421-45f0-a846-1c3d4fc8ddcb"/>
 # MAGIC 
 # MAGIC  

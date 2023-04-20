@@ -163,7 +163,7 @@ AS
 -- MAGIC * Schema
 -- MAGIC * Data quality metrics
 -- MAGIC 
--- MAGIC Refer to this <a href="$./DE 8.3 - Pipeline Results" target="_blank">companion notebook</a> to inspect tables and logs.
+-- MAGIC Refer to this <a href="$./DE 8.1.3 - Pipeline Results" target="_blank">companion notebook</a> to inspect tables and logs.
 
 -- COMMAND ----------
 
@@ -182,7 +182,7 @@ AS
 
 -- COMMAND ----------
 
--- TODO
+-- TODO: Figure out why !!
 -- CREATE OR REFRESH LIVE TABLE sales_order_in_chicago
 -- COMMENT "Sales orders in Chicago."
 -- AS
